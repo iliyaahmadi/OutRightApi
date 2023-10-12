@@ -4,7 +4,7 @@
   "description": "ecommerce api",
   "main": "server.js",
   "scripts": {
-    "dev" : "nodemon server.js --watch",
+    "dev": "nodemon server.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +18,14 @@
   },
   "homepage": "https://github.com/iliyaahmadi/OutRightApi#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.33.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
