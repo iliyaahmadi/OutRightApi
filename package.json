@@ -1,0 +1,26 @@
+{
+  "name": "outrightapi",
+  "version": "1.0.0",
+  "description": "ecommerce api",
+  "main": "server.js",
+  "scripts": {
+    "dev" : "nodemon server.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iliyaahmadi/OutRightApi.git"
+  },
+  "author": "Iliya Ahmadi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iliyaahmadi/OutRightApi/issues"
+  },
+  "homepage": "https://github.com/iliyaahmadi/OutRightApi#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
