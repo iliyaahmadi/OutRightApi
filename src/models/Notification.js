@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('product', {
+  const Notification = sequelize.define('notification', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -9,18 +9,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    slug: {
+    message: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    desc: {
+    type: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
+    seen: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   });
-  return Product;
+  return Notification;
 };

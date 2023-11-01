@@ -21,5 +21,67 @@ db.sequelize = sequelize;
 
 //models
 db.user = require('./User.js')(sequelize, DataTypes);
+db.role = require('./Role.js')(sequelize, DataTypes);
+db.product = require('./Product.js')(sequelize, DataTypes);
+db.blog = require('./Blog.js')(sequelize, DataTypes);
+db.cart = require('./Cart.js')(sequelize, DataTypes);
+db.notification = require('./Notification.js')(sequelize, DataTypes);
+db.discount = require('./Discount.js')(sequelize, DataTypes);
+db.tag = require('./Tag.js')(sequelize, DataTypes);
+db.review = require('./Review.js')(sequelize, DataTypes);
+
+// user-role
+db.role.hasMany(db.user, {
+  foreignKey: 'role_id',
+  defaultValue: 1,
+});
+
+// cart-user / product
+db.user.hasOne(db.cart, {
+  foreignKey: 'user_id',
+});
+
+db.cart.belongsToMany(db.product, {
+  through: 'cart_products',
+});
+db.product.belongsToMany(db.cart, {
+  through: 'cart_products',
+});
+
+// notification-user
+db.user.hasMany(db.notification, {
+  foreignKey: 'user_id',
+});
+
+// discount-user
+db.user.hasMany(db.discount, {
+  foreignKey: 'user_id',
+});
+
+// product-tag
+db.tag.belongsToMany(db.product, {
+  through: 'product_tag',
+});
+db.product.belongsToMany(db.tag, {
+  through: 'product_tag',
+});
+// blog-tag
+db.tag.belongsToMany(db.blog, {
+  through: 'blog_tag',
+});
+db.blog.belongsToMany(db.tag, {
+  through: 'blog_tag',
+});
+
+// user-product-review
+db.user.hasMany(db.review, {
+  foreignKey: 'user_id',
+});
+db.product.belongsToMany(db.review, {
+  through: 'product_review',
+});
+db.review.belongsToMany(db.product, {
+  through: 'product_review',
+});
 
 module.exports = db;

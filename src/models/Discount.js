@@ -1,26 +1,27 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('product', {
+  const Discount = sequelize.define('discount', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    title: {
+    code: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    slug: {
+    static: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    desc: {
+    percent: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     quantity: {
       type: DataTypes.INTEGER,
+      defaultValue: 1,
       allowNull: false,
     },
   });
-  return Product;
+  return Discount;
 };

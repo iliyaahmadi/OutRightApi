@@ -5,12 +5,16 @@ const db = require('./models/index');
 global.__basedir = __dirname;
 
 // temp for initializing server / reseting DB
-// const initial = require('./utils/initial');
-// {force : true}
+
+// const initial = require('./utils/dbInitial');
+
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log('DB CONNECTED - ReStarted');
+//   initial(db.role);
+// });
 
 db.sequelize.sync().then(() => {
   console.log('DB CONNECTED');
-  // initial(db.role);
 });
 
 //middlewares

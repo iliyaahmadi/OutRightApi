@@ -1,26 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('product', {
+  const Review = sequelize.define('review', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    title: {
+    comment: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    slug: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    desc: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    quantity: {
+    likes: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    dislikes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
       allowNull: false,
     },
   });
-  return Product;
+  return Review;
 };
