@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NULL,
     },
     birthday: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true,
     },
     activation_code: {

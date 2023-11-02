@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Review = sequelize.define('review', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     comment: {
