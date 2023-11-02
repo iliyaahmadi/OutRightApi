@@ -20,27 +20,27 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //models
-db.user = require('./User.js')(sequelize, DataTypes);
-db.role = require('./Role.js')(sequelize, DataTypes);
-db.product = require('./Product.js')(sequelize, DataTypes);
-db.blog = require('./Blog.js')(sequelize, DataTypes);
-db.cart = require('./Cart.js')(sequelize, DataTypes);
-db.notification = require('./Notification.js')(sequelize, DataTypes);
-db.discount = require('./Discount.js')(sequelize, DataTypes);
-db.tag = require('./Tag.js')(sequelize, DataTypes);
-db.review = require('./Review.js')(sequelize, DataTypes);
-db.question = require('./Question.js')(sequelize, DataTypes);
-db.category = require('./Category.js')(sequelize, DataTypes);
-db.trait = require('./Trait.js')(sequelize, DataTypes);
-db.sku = require('./Sku.js')(sequelize, DataTypes);
-db.attribute = require('./Attribute.js')(sequelize, DataTypes);
-db.attribute_value = require('./AttributeValue.js')(sequelize, DataTypes);
-db.product_userinfo = require('./ProductUserInfo.js')(sequelize, DataTypes);
-db.product_userinfo_value = require('./ProductUserInfoValue.js')(
+db.user = require('./user.js')(sequelize, DataTypes);
+db.role = require('./role.js')(sequelize, DataTypes);
+db.product = require('./product.js')(sequelize, DataTypes);
+db.blog = require('./blog.js')(sequelize, DataTypes);
+db.cart = require('./cart.js')(sequelize, DataTypes);
+db.notification = require('./notification.js')(sequelize, DataTypes);
+db.discount = require('./discount.js')(sequelize, DataTypes);
+db.tag = require('./tag.js')(sequelize, DataTypes);
+db.review = require('./review.js')(sequelize, DataTypes);
+db.question = require('./question.js')(sequelize, DataTypes);
+db.category = require('./category.js')(sequelize, DataTypes);
+db.trait = require('./trait.js')(sequelize, DataTypes);
+db.sku = require('./sku.js')(sequelize, DataTypes);
+db.attribute = require('./attribute.js')(sequelize, DataTypes);
+db.attribute_value = require('./attributeValue.js')(sequelize, DataTypes);
+db.product_userinfo = require('./productUserInfo.js')(sequelize, DataTypes);
+db.product_userinfo_value = require('./productUserInfoValue.js')(
   sequelize,
   DataTypes
 );
-db.order = require('./Order.js')(sequelize, DataTypes);
+db.order = require('./order.js')(sequelize, DataTypes);
 
 // user-role
 db.role.hasMany(db.user, {
@@ -141,10 +141,10 @@ db.product_userinfo.hasOne(db.product_userinfo_value, {
 db.cart.hasOne(db.order, {
   foreignKey: 'cart_id',
 });
-db.cart.belongsToMany(db.product_userinfo_value, {
+db.order.belongsToMany(db.product_userinfo_value, {
   through: 'order_userInfo',
 });
-db.product_userinfo_value.belongsToMany(db.cart, {
+db.product_userinfo_value.belongsToMany(db.order, {
   through: 'order_userInfo',
 });
 
