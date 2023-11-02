@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('product', {
+  const Category = sequelize.define('category', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -17,14 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    user_info: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
   });
-  return Product;
+  return Category;
 };
