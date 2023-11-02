@@ -1,8 +1,5 @@
 const User = require('../models').user;
 const hashPassword = require('../utils/hashPass');
-const fs = require('fs');
-
-//console
 
 const findAll = async (req, res) => {
   const users = await User.findAll({
@@ -20,52 +17,54 @@ const findAll = async (req, res) => {
 };
 
 const findById = async (req, res) => {
-  if (req.userRole === 1) {
-    if (req.userId === req.params.id) {
-      await User.findOne({
-        where: {
-          id: req.params.id,
-        },
-        attributes: [
-          'firstname',
-          'lastname',
-          'email',
-          'number',
-          'profile',
-          'birthday',
-          'createdAt',
-        ],
-      })
-        .then((user) => {
-          return res.status(200).json(user);
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(400).json({ message: err });
-        });
-    }
-  }
-  await User.findOne({
-    where: {
-      id: req.params.id,
-    },
-    attributes: [
-      'firstname',
-      'lastname',
-      'email',
-      'number',
-      'profile',
-      'birthday',
-      'createdAt',
-    ],
-  })
-    .then((user) => {
-      return res.status(200).json(user);
+  if (req.userRole === 1 && req.userId === req.params.id) {
+    await User.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: [
+        'firstname',
+        'lastname',
+        'email',
+        'number',
+        'profile',
+        'birthday',
+        'createdAt',
+      ],
     })
-    .catch((err) => {
-      console.log(err);
-      return res.status(400).json({ message: err });
-    });
+      .then((user) => {
+        return res.status(200).json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: err });
+      });
+  } else if (req.userRole === 3) {
+    await User.findOne({
+      where: {
+        id: req.params.id,
+      },
+      attributes: [
+        'firstname',
+        'lastname',
+        'email',
+        'number',
+        'profile',
+        'birthday',
+        'createdAt',
+      ],
+    })
+      .then((user) => {
+        return res.status(200).json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: err });
+      });
+  }
+  return res
+    .status(500)
+    .json({ message: 'دسترسی شما به دیدن اکانت های دیگر بسته است' });
 };
 
 const findByEmail = async (email) => {

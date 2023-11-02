@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const hashPassword = require('../utils/hashPass');
 const User = require('../models').user;
+const Cart = require('../models').cart;
 
 const login = async (req, res) => {
   const email = req.body?.email;
@@ -61,7 +62,7 @@ const signup = async (req, res) => {
     });
   } else {
     const hashedPass = await hashPassword(req.body.password);
-    await User.create({
+    const user = await User.create({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       email: req.body.email,
@@ -70,6 +71,7 @@ const signup = async (req, res) => {
       profile: null,
       role_id: 1,
     });
+    await Cart.create({ user_id: user.id });
     res.status(201).json({ message: 'حساب کاربری با موفقیت ساخته شد' });
   }
 };

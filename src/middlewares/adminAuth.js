@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = user.id;
     req.userRole = user.role;
-    if (user.role == 4) {
+    if (user.role == 3) {
       return next();
     } else {
       return res.sendStatus(401);
