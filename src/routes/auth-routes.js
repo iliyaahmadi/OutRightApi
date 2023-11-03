@@ -1,6 +1,6 @@
 const authRoutes = require('express').Router();
-const { login, signup, logout } = require('../controllers/authController');
-const userAuth = require('../middlewares/userAuth');
+const { login, signup, logout } = require('../controllers/auth-controller');
+const userAuth = require('../middlewares/user-auth');
 
 authRoutes.route('/login').post(login);
 

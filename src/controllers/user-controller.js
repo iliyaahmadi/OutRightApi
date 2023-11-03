@@ -61,10 +61,11 @@ const findById = async (req, res) => {
         console.log(err);
         return res.status(400).json({ message: err });
       });
+  } else {
+    return res
+      .status(500)
+      .json({ message: 'دسترسی شما به دیدن اکانت های دیگر بسته است' });
   }
-  return res
-    .status(500)
-    .json({ message: 'دسترسی شما به دیدن اکانت های دیگر بسته است' });
 };
 
 const findByEmail = async (email) => {
@@ -198,7 +199,7 @@ const updateUserRole = async (req, res) => {
 const uploadProfile = async (req, res) => {
   await User.update(
     {
-      image: req.file.path,
+      profile: req.file.path,
     },
     {
       where: {
@@ -211,14 +212,12 @@ const uploadProfile = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findOne({
-      where: {
-        id: req.userId,
-      },
-    });
-    if (user.image) {
+    console.log('--------------------------------')
+    const user = await findById(req.userId);
+    console.log(user);
+    if (user.profile) {
       let path = __basedir.replace(/\\src/, '//');
-      return res.sendFile(path + user.image);
+      return res.sendFile(path + user.profile);
     }
     return res.status(404).json({ msg: 'عکسی پیدا نشد' });
   } catch (err) {

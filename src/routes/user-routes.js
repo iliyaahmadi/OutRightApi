@@ -8,9 +8,9 @@ const {
   getProfile,
   updateUserRole,
   uploadProfile,
-} = require('../controllers/userController');
-const userAuth = require('../middlewares/userAuth');
-const adminAuth = require('../middlewares/adminAuth');
+} = require('../controllers/user-controller');
+const userAuth = require('../middlewares/user-auth');
+const adminAuth = require('../middlewares/admin-auth');
 const uploadImage = require('../utils/uploadImg');
 
 userRoutes.route('/user').get(adminAuth, findAll).post(adminAuth, create);
