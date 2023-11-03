@@ -1,4 +1,4 @@
-const config = require('../schema/database.js');
+const config = require('../database/index.js');
 const Sequelize = require('sequelize');
 const DataTypes = require('sequelize').DataTypes;
 
