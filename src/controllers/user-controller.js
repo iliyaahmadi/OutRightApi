@@ -1,5 +1,7 @@
 const User = require('../models').user;
+const Role = require('../models').role;
 const hashPassword = require('../utils/hashPass');
+const fs = require('fs');
 
 const findAll = async (req, res) => {
   const users = await User.findAll({
@@ -12,6 +14,7 @@ const findAll = async (req, res) => {
       'profile',
       'createdAt',
     ],
+    include: Role,
   });
   res.status(200).json(users);
 };
@@ -197,6 +200,19 @@ const updateUserRole = async (req, res) => {
 };
 
 const uploadProfile = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      id: req.userId,
+    },
+    attributes: ['profile'],
+  });
+  //deletes old pfp
+  if (user.profile) {
+    fs.unlink(user.profile, (err) => {
+      if (err) throw err;
+      console.log(err);
+    });
+  }
   await User.update(
     {
       profile: req.file.path,
@@ -212,7 +228,7 @@ const uploadProfile = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    console.log('--------------------------------')
+    console.log('--------------------------------');
     const user = await findById(req.userId);
     console.log(user);
     if (user.profile) {

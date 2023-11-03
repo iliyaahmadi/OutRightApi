@@ -1,4 +1,4 @@
-const config = require('../configs/database');
+const config = require('../schema/database.js');
 const Sequelize = require('sequelize');
 const DataTypes = require('sequelize').DataTypes;
 
@@ -44,14 +44,13 @@ db.order = require('./order.js')(sequelize, DataTypes);
 
 // user-role
 db.role.hasMany(db.user, {
-  foreignKey: 'role_id',
   defaultValue: 1,
 });
+db.user.belongsTo(db.role);
 
 // cart-user / product
-db.user.hasOne(db.cart, {
-  foreignKey: 'user_id',
-});
+db.user.hasOne(db.cart);
+db.cart.belongsTo(db.user);
 
 db.cart.belongsToMany(db.product, {
   through: 'cart_products',
@@ -61,14 +60,12 @@ db.product.belongsToMany(db.cart, {
 });
 
 // notification-user
-db.user.hasMany(db.notification, {
-  foreignKey: 'user_id',
-});
+db.user.hasMany(db.notification);
+db.notification.belongsTo(db.user);
 
 // discount-user
-db.user.hasMany(db.discount, {
-  foreignKey: 'user_id',
-});
+db.user.hasMany(db.discount);
+db.discount.belongsTo(db.user);
 
 // product-tag
 db.tag.belongsToMany(db.product, {
@@ -86,61 +83,52 @@ db.blog.belongsToMany(db.tag, {
 });
 
 // user-product-review / question
-db.user.hasMany(db.review, {
-  foreignKey: 'user_id',
-});
-db.product.hasMany(db.review, {
-  foreignKey: 'product_id',
-});
+db.user.hasMany(db.review);
+db.review.belongsTo(db.user);
 
-db.user.hasMany(db.question, {
-  foreignKey: 'user_id',
-});
-db.product.hasMany(db.question, {
-  foreignKey: 'product_id',
-});
+db.product.hasMany(db.review);
+db.review.belongsTo(db.product);
+
+db.user.hasMany(db.question);
+db.question.belongsTo(db.user);
+
+db.product.hasMany(db.question);
+db.question.belongsTo(db.product);
 
 // product-cat
-db.category.hasMany(db.product, {
-  foreignKey: 'cat_id',
-});
+db.category.hasMany(db.product);
+db.product.belongsTo(db.category);
 
 // trait-product
-db.product.hasMany(db.trait, {
-  foreignKey: 'product_id',
-});
+db.product.hasMany(db.trait);
+db.trait.belongsTo(db.product);
 
 // sku-product
-db.product.hasOne(db.sku, {
-  foreignKey: 'product_id',
-});
+db.product.hasOne(db.sku);
+db.sku.belongsTo(db.product);
 
 // attribute-product
-db.product.hasMany(db.attribute, {
-  foreignKey: 'product_id',
-});
+db.product.hasMany(db.attribute);
+db.attribute.belongsTo(db.product);
 
 // attribute_value-attribute / sku
-db.attribute.hasOne(db.attribute_value, {
-  foreignKey: 'attribute_id',
-});
-db.sku.hasMany(db.attribute_value, {
-  foreignKey: 'sku_id',
-});
+db.attribute.hasOne(db.attribute_value);
+db.attribute_value.belongsTo(db.attribute);
+
+db.sku.hasMany(db.attribute_value);
+db.attribute_value.belongsTo(db.sku);
 
 // product_userinfo-product
-db.product.hasMany(db.product_userinfo, {
-  foreignKey: 'product_id',
-});
+db.product.hasMany(db.product_userinfo);
+db.product_userinfo.belongsTo(db.product);
 
 // product_userinfo-attribute / sku
-db.product_userinfo.hasOne(db.product_userinfo_value, {
-  foreignKey: 'product_userinfo',
-});
+db.product_userinfo.hasOne(db.product_userinfo_value);
+db.product_userinfo_value.belongsTo(db.product_userinfo);
+
 // order_cart
-db.cart.hasOne(db.order, {
-  foreignKey: 'cart_id',
-});
+db.cart.hasOne(db.order);
+db.order.belongsTo(db.cart);
 db.order.belongsToMany(db.product_userinfo_value, {
   through: 'order_userInfo',
 });
