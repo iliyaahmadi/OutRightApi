@@ -43,10 +43,8 @@ db.product_userinfo_value = require('./productUserInfoValue.js')(
 db.order = require('./order.js')(sequelize, DataTypes);
 
 // user-role
-db.role.hasMany(db.user, {
-  defaultValue: 1,
-});
-db.user.belongsTo(db.role);
+db.role.hasMany(db.user);
+db.user.belongsTo(db.role, { foreignKey: { defaultValue: 1 } });
 
 // cart-user / product
 db.user.hasOne(db.cart);

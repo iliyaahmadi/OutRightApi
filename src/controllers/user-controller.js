@@ -119,7 +119,7 @@ const create = async (req, res) => {
     password: hashedPass,
     number: req.body.number,
     profile: null,
-    role_id: 1,
+    roldId: 1,
   });
   res.status(201).json({
     message: `حساب کاربری با موفقیت ساخته شد`,
@@ -182,7 +182,7 @@ const updateUserRole = async (req, res) => {
     res.status(400).json({ message: `نقش نامعتبر`, roleId });
   }
   User.update(
-    { role_id: roleId },
+    { roldId: roleId },
     {
       where: {
         id: id,
@@ -206,11 +206,9 @@ const uploadProfile = async (req, res) => {
     },
     attributes: ['profile'],
   });
-  //deletes old pfp
   if (user.profile) {
     fs.unlink(user.profile, (err) => {
-      if (err) throw err;
-      console.log(err);
+      if (err) throw new Error(err);
     });
   }
   await User.update(

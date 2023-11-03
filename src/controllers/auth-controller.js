@@ -37,7 +37,7 @@ const login = async (req, res) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, role: user.role_id },
+    { id: user.id, role: user.roleId },
     process.env.JWT_SECRET
   );
   return res
@@ -69,7 +69,7 @@ const signup = async (req, res) => {
       password: hashedPass,
       number: req.body.number,
       profile: null,
-      role_id: 1,
+      roleId: 1,
     });
     await Cart.create({ user_id: user.id });
     res.status(201).json({ message: 'حساب کاربری با موفقیت ساخته شد' });
