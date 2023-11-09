@@ -67,7 +67,7 @@ const findById = async (req, res) => {
   } else {
     return res
       .status(500)
-      .json({ message: 'دسترسی شما به دیدن اکانت های دیگر بسته است' });
+      .json({ message: 'عدم دسترسی به اکانت سایر کاربر ها' });
   }
 };
 
@@ -100,30 +100,34 @@ const findByNumber = async (number) => {
 };
 
 const create = async (req, res) => {
-  const dubEmail = await findByEmail(req.body.email);
-  const dubNumber = await findByNumber(req.body.number);
-  if (dubEmail) {
-    return res.status(500).json({
-      message: `کاربری بااین ایمیل قبلا ثبت نام کرده`,
-    });
-  } else if (dubNumber) {
-    return res.status(500).json({
-      message: `کاربری بااین شماره قبلا ثبت نام کرده`,
-    });
-  }
-  const hashedPass = await hashPassword(req.body.password);
-  await User.create({
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    password: hashedPass,
-    number: req.body.number,
-    profile: null,
-    roldId: 1,
-  });
-  res.status(201).json({
-    message: `حساب کاربری با موفقیت ساخته شد`,
-  });
+  console.log('ساخت اکانت به صورت دستی قعال نمیباشد');
+  return res
+    .status(500)
+    .json({ message: 'ساخت اکانت به صورت دستی قعال نمیباشد ' });
+  // const dubEmail = await findByEmail(req.body.email);
+  // const dubNumber = await findByNumber(req.body.number);
+  // if (dubEmail) {
+  //   return res.status(500).json({
+  //     message: `کاربری بااین ایمیل قبلا ثبت نام کرده`,
+  //   });
+  // } else if (dubNumber) {
+  //   return res.status(500).json({
+  //     message: `کاربری بااین شماره قبلا ثبت نام کرده`,
+  //   });
+  // }
+  // const hashedPass = await hashPassword(req.body.password);
+  // await User.create({
+  //   firstname: req.body.firstname,
+  //   lastname: req.body.lastname,
+  //   email: req.body.email,
+  //   password: hashedPass,
+  //   number: req.body.number,
+  //   profile: null,
+  //   roldId: 1,
+  // });
+  // res.status(201).json({
+  //   message: `حساب کاربری با موفقیت ساخته شد`,
+  // });
 };
 
 const edit = async (req, res) => {
