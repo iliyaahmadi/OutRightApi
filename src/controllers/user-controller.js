@@ -1,6 +1,6 @@
 const User = require('../models').user;
 const Role = require('../models').role;
-const hashPassword = require('../utils/hashPass');
+const isUUID = require('is-uuid');
 const fs = require('fs');
 
 const findAll = async (req, res) => {
@@ -20,7 +20,10 @@ const findAll = async (req, res) => {
 };
 
 const findById = async (req, res) => {
-  if (req.userRole === 1 && req.userId === req.params.id) {
+  const valid = isUUID.v4(req.params.id);
+  if (!valid) {
+    return res.status(404).json({ message: 'کاربری با این آیدی وجود ندارد' });
+  } else if (req.userRole === 1 && req.userId === req.params.id) {
     await User.findOne({
       where: {
         id: req.params.id,
