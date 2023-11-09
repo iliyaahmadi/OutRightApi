@@ -24,6 +24,8 @@ db.user = require('./user.js')(sequelize, DataTypes);
 db.role = require('./role.js')(sequelize, DataTypes);
 db.product = require('./product.js')(sequelize, DataTypes);
 db.blog = require('./blog.js')(sequelize, DataTypes);
+db.section = require('./section.js')(sequelize, DataTypes);
+db.sectionImg = require('./sectionImg.js')(sequelize, DataTypes);
 db.cart = require('./cart.js')(sequelize, DataTypes);
 db.notification = require('./notification.js')(sequelize, DataTypes);
 db.discount = require('./discount.js')(sequelize, DataTypes);
@@ -79,6 +81,14 @@ db.tag.belongsToMany(db.blog, {
 db.blog.belongsToMany(db.tag, {
   through: 'blog_tag',
 });
+
+//blog-section
+db.blog.hasMany(db.section);
+db.section.belongsTo(db.blog);
+
+//section-section_img
+db.section.hasMany(db.sectionImg);
+db.sectionImg.belongsTo(db.section);
 
 // user-product-review / question
 db.user.hasMany(db.review);

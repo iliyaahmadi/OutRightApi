@@ -13,13 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    banner: {
+    thumb: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    body: {
-      type: DataTypes.TEXT,
-      allowNull: false,
     },
     author: {
       type: DataTypes.STRING,
