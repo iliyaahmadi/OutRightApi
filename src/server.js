@@ -6,11 +6,12 @@ global.__basedir = __dirname;
 
 // temp for initializing server / reseting DB
 
-// const initial = require('./utils/dbInitial');
+// const {stticRole , stticCat} = require('./utils/dbInitial');
 
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log('DB CONNECTED - ReStarted');
-//   initial(db.role);
+//   stticRole(db.role);
+//   stticCat(db.category)
 // });
 
 db.sequelize.sync().then(() => {
