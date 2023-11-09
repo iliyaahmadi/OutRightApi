@@ -71,7 +71,7 @@ const signup = async (req, res) => {
       profile: null,
       roleId: 1,
     });
-    await Cart.create({ user_id: user.id });
+    await Cart.create({ userId: user.id });
     res.status(201).json({ message: 'حساب کاربری با موفقیت ساخته شد' });
   }
 };
