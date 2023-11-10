@@ -3,8 +3,9 @@ const jwt = require('jsonwebtoken');
 const hashPassword = require('../utils/hashPass');
 const User = require('../models').user;
 const Cart = require('../models').cart;
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
-const login = async (req, res) => {
+const login = asyncErrorHandler(async (req, res, next) => {
   const email = req.body?.email;
   const password = req.body?.password;
   let user, validPass;
@@ -47,9 +48,9 @@ const login = async (req, res) => {
     })
     .status(200)
     .json({ message: 'شما با موفقیت وارد شدید' });
-};
+});
 
-const signup = async (req, res) => {
+const signup = asyncErrorHandler(async (req, res, next) => {
   const dubEmail = await findByEmail(req.body.email);
   const dubNumber = await findByNumber(req.body.number);
   if (dubEmail) {
@@ -74,16 +75,16 @@ const signup = async (req, res) => {
     await Cart.create({ userId: user.id });
     res.status(201).json({ message: 'حساب کاربری با موفقیت ساخته شد' });
   }
-};
+});
 
-const logout = (req, res) => {
+const logout = asyncErrorHandler((req, res, next) => {
   return res
     .clearCookie('access_token')
     .status(200)
     .json({ message: 'با موفقیت از حساب حارج شدید' });
-};
+});
 
-const findByEmail = async (email) => {
+const findByEmail = asyncErrorHandler(async (email) => {
   const exists = await User.findOne({
     where: {
       email,
@@ -95,9 +96,9 @@ const findByEmail = async (email) => {
   } else {
     return false;
   }
-};
+});
 
-const findByNumber = async (number) => {
+const findByNumber = asyncErrorHandler(async (number) => {
   const exists = await User.findOne({
     where: {
       number,
@@ -109,7 +110,7 @@ const findByNumber = async (number) => {
   } else {
     return false;
   }
-};
+});
 
 module.exports = {
   login,

@@ -2,8 +2,9 @@ const User = require('../models').user;
 const Role = require('../models').role;
 const isUUID = require('is-uuid');
 const fs = require('fs');
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
-const findAll = async (req, res) => {
+const findAll = asyncErrorHandler(async (req, res, next) => {
   const users = await User.findAll({
     attributes: [
       'id',
@@ -17,9 +18,9 @@ const findAll = async (req, res) => {
     include: Role,
   });
   res.status(200).json(users);
-};
+});
 
-const findById = async (req, res) => {
+const findById = asyncErrorHandler(async (req, res, next) => {
   const valid = isUUID.v4(req.params.id);
   if (!valid) {
     return res.status(404).json({ message: 'کاربری با این آیدی وجود ندارد' });
@@ -37,14 +38,9 @@ const findById = async (req, res) => {
         'birthday',
         'createdAt',
       ],
-    })
-      .then((user) => {
-        return res.status(200).json(user);
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(400).json({ message: err });
-      });
+    }).then((user) => {
+      return res.status(200).json(user);
+    });
   } else if (req.userRole === 3) {
     await User.findOne({
       where: {
@@ -59,22 +55,17 @@ const findById = async (req, res) => {
         'birthday',
         'createdAt',
       ],
-    })
-      .then((user) => {
-        return res.status(200).json(user);
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(400).json({ message: err });
-      });
+    }).then((user) => {
+      return res.status(200).json(user);
+    });
   } else {
     return res
       .status(500)
       .json({ message: 'عدم دسترسی به اکانت سایر کاربر ها' });
   }
-};
+});
 
-const findByEmail = async (email) => {
+const findByEmail = asyncErrorHandler(async (email) => {
   const exists = await User.findOne({
     where: {
       email,
@@ -86,9 +77,9 @@ const findByEmail = async (email) => {
   } else {
     return false;
   }
-};
+});
 
-const findByNumber = async (number) => {
+const findByNumber = asyncErrorHandler(async (number) => {
   const exists = await User.findOne({
     where: {
       number,
@@ -100,9 +91,9 @@ const findByNumber = async (number) => {
   } else {
     return false;
   }
-};
+});
 
-const create = async (req, res) => {
+const create = asyncErrorHandler(async (req, res, next) => {
   console.log('ساخت اکانت به صورت دستی قعال نمیباشد');
   return res
     .status(500)
@@ -131,9 +122,9 @@ const create = async (req, res) => {
   // res.status(201).json({
   //   message: `حساب کاربری با موفقیت ساخته شد`,
   // });
-};
+});
 
-const edit = async (req, res) => {
+const edit = asyncErrorHandler(async (req, res, next) => {
   const target = await User.findOne({
     where: {
       id: req.params.id,
@@ -154,29 +145,28 @@ const edit = async (req, res) => {
   res.status(200).json({
     message: ` حساب با مشخصات داده شده تغییر کرد`,
   });
-};
+});
 
-const remove = async (req, res) => {
+const remove = asyncErrorHandler(async (req, res, next) => {
   const id = req.params.id;
-  User.destroy({
+  await User.destroy({
     where: {
       id: id,
     },
-  })
-    .then(() => {
+  }).then((user) => {
+    if (user) {
       res
         .status(200)
         .json({ message: `یوزر مورد نظر با این آیدی پاک شد ${id}` });
       return;
-    })
-    .catch((err) => {
-      res.status(400).json({ message: err });
-      console.log(err);
+    } else {
+      res.status(404).json({ message: 'یوزری با این ایدی وجود ندارد' });
       return;
-    });
-};
+    }
+  });
+});
 
-const updateUserRole = async (req, res) => {
+const updateUserRole = asyncErrorHandler(async (req, res, next) => {
   let id = req.params.id;
   let roleId = req.body.role;
   if (roleId === 'user') {
@@ -195,18 +185,12 @@ const updateUserRole = async (req, res) => {
         id: id,
       },
     }
-  )
-    .then(() => {
-      res.status(200).json({ message: `نقش تغییر کرد` });
-    })
-    .catch((err) => {
-      res.status(400).json({ message: err });
-      console.log(err);
-      return;
-    });
-};
+  ).then(() => {
+    res.status(200).json({ message: `نقش تغییر کرد` });
+  });
+});
 
-const uploadProfile = async (req, res) => {
+const uploadProfile = asyncErrorHandler(async (req, res, next) => {
   if (req.file) {
     const user = await User.findOne({
       where: {
@@ -235,28 +219,21 @@ const uploadProfile = async (req, res) => {
       .status(200)
       .json({ message: 'لطفا یک عکس با فرمت jpg/jpeg/png انتخاب کتید' });
   }
-};
+});
 
-const getProfile = async (req, res) => {
-  try {
-    console.log('--------------------------------');
-    const user = await User.findOne({
-      where: {
-        id: req.userId,
-      },
-    });
-    console.log(user);
-    if (user.profile) {
-      let path = __basedir.replace(/\\src/, '//');
-      return res.sendFile(path + user.profile);
-    }
-    return res.status(404).json({ msg: 'عکسی پیدا نشد' });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err });
+const getProfile = asyncErrorHandler(async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      id: req.userId,
+    },
+  });
+  console.log(user);
+  if (user.profile) {
+    let path = __basedir.replace(/\\src/, '//');
+    return res.sendFile(path + user.profile);
   }
-};
-
+  return res.status(404).json({ msg: 'عکسی پیدا نشد' });
+});
 module.exports = {
   findById,
   create,
