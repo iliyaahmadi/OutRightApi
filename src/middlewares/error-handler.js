@@ -27,6 +27,13 @@ module.exports = (error, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     devErrors(res, error);
   } else if (process.env.NODE_ENV === 'production') {
+    //error for uuid
+    if (error.parent.code == '22P02') {
+      return res.status(400).json({
+        status: 'bad request',
+        message: 'ایدی وارد شده صحیح نمیباشد',
+      });
+    }
     prodErrors(res, error);
   }
 };

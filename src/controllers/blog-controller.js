@@ -1,7 +1,6 @@
 const Blog = require('../models').blog;
 const Section = require('../models').section;
 const SectionImg = require('../models').sectionImg;
-const isUUID = require('is-uuid');
 
 const findAll = async (req, res) => {
   const blogs = await Blog.findAll({
@@ -14,38 +13,33 @@ const findAll = async (req, res) => {
       'createdAt',
       'updatedAt',
     ],
-    include: [Section.include(SectionImg)],
+    include: [{ model: Section, include: [SectionImg] }],
   });
   res.status(200).json(blogs);
 };
 
 const findById = async (req, res) => {
-  const valid = isUUID.v4(req.params.id);
-  if (!valid) {
-    return res.status(404).json({ message: 'پستی با این آیدی وجود ندارد' });
-  } else {
-    await Blog.findOne({
-      where: {
-        id: req.params.id,
-      },
-      attributes: [
-        'id',
-        'title',
-        'slug',
-        'thumb',
-        'author',
-        'createdAt',
-        'updatedAt',
-      ],
+  await Blog.findOne({
+    where: {
+      id: req.params.id,
+    },
+    attributes: [
+      'id',
+      'title',
+      'slug',
+      'thumb',
+      'author',
+      'createdAt',
+      'updatedAt',
+    ],
+  })
+    .then((blog) => {
+      return res.status(200).json(blog);
     })
-      .then((blog) => {
-        return res.status(200).json(blog);
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(400).json({ message: err });
-      });
-  }
+    .catch((err) => {
+      console.log(err);
+      return res.status(400).json({ message: err });
+    });
 };
 
 const create = async (req, res) => {

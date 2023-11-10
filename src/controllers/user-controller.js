@@ -1,6 +1,5 @@
 const User = require('../models').user;
 const Role = require('../models').role;
-const isUUID = require('is-uuid');
 const fs = require('fs');
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
@@ -21,10 +20,7 @@ const findAll = asyncErrorHandler(async (req, res, next) => {
 });
 
 const findById = asyncErrorHandler(async (req, res, next) => {
-  const valid = isUUID.v4(req.params.id);
-  if (!valid) {
-    return res.status(404).json({ message: 'کاربری با این آیدی وجود ندارد' });
-  } else if (req.userRole === 1 && req.userId === req.params.id) {
+  if (req.userRole === 1 && req.userId === req.params.id) {
     await User.findOne({
       where: {
         id: req.params.id,
@@ -130,21 +126,26 @@ const edit = asyncErrorHandler(async (req, res, next) => {
       id: req.params.id,
     },
   });
-  await User.update(
-    {
-      firstname: req.body.firstname ?? target.firstname,
-      lastname: req.body.lastname ?? target.lastname,
-      birthday: req.body.birthday ?? target.birthday,
-    },
-    {
-      where: {
-        id: req.params.id,
+  if (target) {
+    await User.update(
+      {
+        firstname: req.body.firstname ?? target.firstname,
+        lastname: req.body.lastname ?? target.lastname,
+        birthday: req.body.birthday ?? target.birthday,
       },
-    }
-  );
-  res.status(200).json({
-    message: ` حساب با مشخصات داده شده تغییر کرد`,
-  });
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      message: ` حساب با مشخصات داده شده تغییر کرد`,
+    });
+  } else {
+    res.status(404).json({ message: 'یوزری با این ایدی وجود ندارد' });
+    return;
+  }
 });
 
 const remove = asyncErrorHandler(async (req, res, next) => {
