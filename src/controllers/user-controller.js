@@ -207,34 +207,44 @@ const updateUserRole = async (req, res) => {
 };
 
 const uploadProfile = async (req, res) => {
-  const user = await User.findOne({
-    where: {
-      id: req.userId,
-    },
-    attributes: ['profile'],
-  });
-  if (user.profile) {
-    fs.unlink(user.profile, (err) => {
-      if (err) throw new Error(err);
-    });
-  }
-  await User.update(
-    {
-      profile: req.file.path,
-    },
-    {
+  if (req.file) {
+    const user = await User.findOne({
       where: {
         id: req.userId,
       },
+      attributes: ['profile'],
+    });
+    if (user.profile) {
+      fs.unlink(user.profile, (err) => {
+        if (err) throw new Error(err);
+      });
     }
-  );
-  res.status(200).json({ message: 'عکس آپلود شد' });
+    await User.update(
+      {
+        profile: req.file.path,
+      },
+      {
+        where: {
+          id: req.userId,
+        },
+      }
+    );
+    return res.status(200).json({ message: 'عکس آپلود شد' });
+  } else {
+    return res
+      .status(200)
+      .json({ message: 'لطفا یک عکس با فرمت jpg/jpeg/png انتخاب کتید' });
+  }
 };
 
 const getProfile = async (req, res) => {
   try {
     console.log('--------------------------------');
-    const user = await findById(req.userId);
+    const user = await User.findOne({
+      where: {
+        id: req.userId,
+      },
+    });
     console.log(user);
     if (user.profile) {
       let path = __basedir.replace(/\\src/, '//');

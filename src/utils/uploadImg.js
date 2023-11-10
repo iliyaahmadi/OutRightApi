@@ -22,7 +22,7 @@ const uploadImage = multer({
     if (mimeType && extname) {
       return cb(null, true);
     }
-    cb('Please upload a file with proper format of jpeg / jpg / png');
+    cb('لطفا یک عکس با فرمت jpg/jpeg/png انتخاب کتید');
   },
 }).single('image');
 

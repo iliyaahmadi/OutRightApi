@@ -15,13 +15,13 @@ const uploadImage = require('../utils/uploadImg');
 
 userRoutes.route('/user').get(adminAuth, findAll).post(adminAuth, create);
 
+userRoutes.route('/user/profile').get(userAuth, getProfile);
+
 userRoutes
   .route('/user/:id')
   .get(userAuth, findById)
   .put(userAuth, edit)
   .delete(adminAuth, remove);
-
-userRoutes.route('/user/profile').get(userAuth, getProfile);
 
 userRoutes.route('/user/:id/role').patch(adminAuth, updateUserRole);
 userRoutes
