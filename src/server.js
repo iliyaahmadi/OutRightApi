@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv').config();
 const app = express();
 const db = require('./models/index');
+const CustomError = require('./utils/customError');
+const globalErrorHandler = require('./middlewares/error-handler');
 global.__basedir = __dirname;
 
 // temp for initializing server / reseting DB
@@ -23,6 +25,12 @@ require('./middlewares/index')(app);
 //router
 require('./routes/index')(app);
 
+app.all('*', (req, res, next) => {
+  const err = new CustomError('ادرس داده شده وجود ندارد', 404);
+  next(err);
+});
+
+app.use(globalErrorHandler);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
