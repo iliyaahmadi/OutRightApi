@@ -44,7 +44,13 @@ function stticCat(cat) {
     slug: 'pubg',
   });
 }
+function saveSku(sku) {
+  sku.create({
+    current: 0,
+  });
+}
 module.exports = {
   stticRole,
   stticCat,
+  saveSku,
 };

@@ -179,7 +179,7 @@ const updateUserRole = asyncErrorHandler(async (req, res, next) => {
   } else {
     res.status(400).json({ message: `نقش نامعتبر`, roleId });
   }
-  User.update(
+  await User.update(
     { roldId: roleId },
     {
       where: {

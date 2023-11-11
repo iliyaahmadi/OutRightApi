@@ -1,8 +1,9 @@
 const Blog = require('../models').blog;
 const Section = require('../models').section;
 const SectionImg = require('../models').sectionImg;
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
-const findAll = async (req, res) => {
+const findAll = async (req, res , next) => {
   const blogs = await Blog.findAll({
     attributes: [
       'id',
@@ -18,7 +19,7 @@ const findAll = async (req, res) => {
   res.status(200).json(blogs);
 };
 
-const findById = async (req, res) => {
+const findById = async (req, res , next) => {
   await Blog.findOne({
     where: {
       id: req.params.id,
@@ -42,7 +43,7 @@ const findById = async (req, res) => {
     });
 };
 
-const create = async (req, res) => {
+const create = async (req, res , next) => {
   await Blog.create({
     title: req.body.title,
     slug: req.body.slug,
@@ -54,7 +55,7 @@ const create = async (req, res) => {
   });
 };
 
-const edit = async (req, res) => {
+const edit = async (req, res , next) => {
   const target = await Blog.findOne({
     where: {
       id: req.params.id,
@@ -78,7 +79,7 @@ const edit = async (req, res) => {
   });
 };
 
-const remove = async (req, res) => {
+const remove = async (req, res , next) => {
   const id = req.params.id;
   Blog.destroy({
     where: {

@@ -43,6 +43,7 @@ db.product_userinfo_value = require('./productUserInfoValue.js')(
   DataTypes
 );
 db.order = require('./order.js')(sequelize, DataTypes);
+db.saveSKU = require('./saveSKU.js')(sequelize, DataTypes);
 
 // user-role
 db.role.hasMany(db.user);
