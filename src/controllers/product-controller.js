@@ -28,11 +28,14 @@ const findById = asyncErrorHandler(async (req, res, next) => {
       'user_info',
       'createdAt',
     ],
-    include: [Trait, Attribute, { model: Sku, include: AttributeValue }],
-  })
-    .then((product) => {
-      return res.status(200).json(product);
-    })
+    include: [
+      Trait,
+      Sku,
+      { model: Attribute, include: { model: AttributeValue } },
+    ],
+  }).then((product) => {
+    return res.status(200).json(product);
+  });
 });
 
 //TODO: seperate SKU from this func
@@ -80,14 +83,44 @@ const create = asyncErrorHandler(async (req, res, next) => {
       productId: p.id,
     });
   });
-  return res.status(201).json({ message: 'محصول ساخته شد' });
+  return res.status(201).json({ message: 'محصول ساخته شد', product: product });
 });
+
+const remove = asyncErrorHandler(async (req, res, next) => {
+  const id = req.params.id;
+  await Product.destroy({
+    where: {
+      id: id,
+    },
+    cascade: true,
+  });
+  return res.status(200).json({ message: 'محصول حذف شد' });
+});
+
+const addAV = asyncErrorHandler(async (req, res, next) => {
+  const values = req.body.values;
+  await Attribute.create({
+    attribute: req.body.attribute,
+    productId: req.params.id,
+  }).then((attr) => {
+    values.forEach(async (value) => {
+      await AttributeValue.create({
+        value: value.name,
+        price: value.price,
+        attributeId: attr.id,
+      });
+    });
+  });
+  return res.status(201).json({ message: 'متغیر ساخته شد' });
+});
+
 module.exports = {
   findAll,
   findById,
   create,
   // edit,
-  // remove,
+  remove,
+  addAV,
 };
 
 // attr - attrvalue
