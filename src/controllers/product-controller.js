@@ -29,9 +29,16 @@ const findById = asyncErrorHandler(async (req, res, next) => {
       'createdAt',
     ],
     include: [
-      Trait,
-      Sku,
-      { model: Attribute, include: { model: AttributeValue } },
+      {
+        model: Trait,
+      },
+      {
+        model: Sku,
+      },
+      {
+        model: Attribute,
+        include: [{ model: AttributeValue, findAll }],
+      },
     ],
   }).then((product) => {
     return res.status(200).json(product);

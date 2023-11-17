@@ -121,7 +121,7 @@ db.product.hasMany(db.attribute);
 db.attribute.belongsTo(db.product);
 
 // attribute_value-attribute 
-db.attribute.hasOne(db.attribute_value);
+db.attribute.hasMany(db.attribute_value);
 db.attribute_value.belongsTo(db.attribute);
 
 // product_userinfo-product
