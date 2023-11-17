@@ -84,11 +84,11 @@ db.blog.belongsToMany(db.tag, {
 });
 
 //blog-section
-db.blog.hasMany(db.section);
+db.blog.hasMany(db.section, { onDelete: 'CASCADE' });
 db.section.belongsTo(db.blog);
 
 //section-section_img
-db.section.hasMany(db.sectionImg);
+db.section.hasMany(db.sectionImg, { onDelete: 'CASCADE' });
 db.sectionImg.belongsTo(db.section);
 
 // user-product-review / question
@@ -113,15 +113,15 @@ db.product.hasMany(db.trait);
 db.trait.belongsTo(db.product);
 
 // sku-product
-db.product.hasOne(db.sku);
+db.product.hasOne(db.sku, { onDelete: 'CASCADE' });
 db.sku.belongsTo(db.product);
 
 // attribute-product
-db.product.hasMany(db.attribute);
+db.product.hasMany(db.attribute, { onDelete: 'CASCADE' });
 db.attribute.belongsTo(db.product);
 
-// attribute_value-attribute 
-db.attribute.hasMany(db.attribute_value);
+// attribute_value-attribute
+db.attribute.hasMany(db.attribute_value, { onDelete: 'CASCADE' });
 db.attribute_value.belongsTo(db.attribute);
 
 // product_userinfo-product
