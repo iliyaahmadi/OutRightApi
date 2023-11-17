@@ -17,10 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    stacks: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
     sku: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     user_info: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   });
   return Product;
