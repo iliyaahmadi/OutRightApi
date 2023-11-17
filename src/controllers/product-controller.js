@@ -1,6 +1,5 @@
 const Product = require('../models').product;
 const Trait = require('../models').trait;
-const Sku = require('../models').sku;
 const Attribute = require('../models').attribute;
 const AttributeValue = require('../models').attribute_value;
 const CurrentSku = require('../models').saveSKU;
@@ -9,7 +8,7 @@ const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
 const findAll = asyncErrorHandler(async (req, res, next) => {
   const products = await Product.findAll({
-    attributes: ['id', 'title', 'slug', 'desc', 'stacks', 'createdAt'],
+    attributes: ['id', 'title', 'slug', 'desc', 'price', 'stacks', 'createdAt'],
   });
   return res.status(200).json(products);
 });
@@ -25,15 +24,15 @@ const findById = asyncErrorHandler(async (req, res, next) => {
       'slug',
       'desc',
       'stacks',
+      'sku',
+      'price',
+      'amount',
       'user_info',
       'createdAt',
     ],
     include: [
       {
         model: Trait,
-      },
-      {
-        model: Sku,
       },
       {
         model: Attribute,
@@ -72,6 +71,9 @@ const create = asyncErrorHandler(async (req, res, next) => {
     slug: productObj.slug,
     desc: productObj.desc,
     stacks: productObj.stacks,
+    sku: productObj.sku,
+    amount: productObj.amount,
+    price: productObj.price,
     user_info: productObj.user_info,
     categoryId: productObj.categoryId,
   }).then(async (p) => {
@@ -83,14 +85,38 @@ const create = asyncErrorHandler(async (req, res, next) => {
         },
       }
     );
-    await Sku.create({
-      sku: productObj.sku,
-      amount: productObj.amount,
-      price: productObj.price,
-      productId: p.id,
-    });
   });
   return res.status(201).json({ message: 'محصول ساخته شد', product: product });
+});
+
+const edit = asyncErrorHandler(async (req, res, next) => {
+  const target = await Product.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (target) {
+    await Product.update(
+      {
+        title: req.body.title ?? target.title,
+        slug: req.body.slug ?? target.slug,
+        desc: req.body.desc ?? target.desc,
+        stacks: req.body.stacks ?? target.stacks,
+        categoryId: req.body.categoryId ?? target.categoryId,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      message: ` حساب با مشخصات داده شده تغییر کرد`,
+    });
+  } else {
+    res.status(404).json({ message: 'یوزری با این ایدی وجود ندارد' });
+    return;
+  }
 });
 
 const remove = asyncErrorHandler(async (req, res, next) => {
@@ -125,9 +151,7 @@ module.exports = {
   findAll,
   findById,
   create,
-  // edit,
+  edit,
   remove,
   addAV,
 };
-
-// attr - attrvalue

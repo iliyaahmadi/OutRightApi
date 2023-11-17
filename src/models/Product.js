@@ -21,6 +21,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    sku: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     user_info: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

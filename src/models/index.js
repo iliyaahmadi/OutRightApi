@@ -34,7 +34,6 @@ db.review = require('./review.js')(sequelize, DataTypes);
 db.question = require('./question.js')(sequelize, DataTypes);
 db.category = require('./category.js')(sequelize, DataTypes);
 db.trait = require('./trait.js')(sequelize, DataTypes);
-db.sku = require('./sku.js')(sequelize, DataTypes);
 db.attribute = require('./attribute.js')(sequelize, DataTypes);
 db.attribute_value = require('./attributeValue.js')(sequelize, DataTypes);
 db.product_userinfo = require('./productUserInfo.js')(sequelize, DataTypes);
@@ -112,10 +111,6 @@ db.product.belongsTo(db.category);
 db.product.hasMany(db.trait);
 db.trait.belongsTo(db.product);
 
-// sku-product
-db.product.hasOne(db.sku, { onDelete: 'CASCADE' });
-db.sku.belongsTo(db.product);
-
 // attribute-product
 db.product.hasMany(db.attribute, { onDelete: 'CASCADE' });
 db.attribute.belongsTo(db.product);
@@ -128,7 +123,7 @@ db.attribute_value.belongsTo(db.attribute);
 db.product.hasMany(db.product_userinfo);
 db.product_userinfo.belongsTo(db.product);
 
-// product_userinfo-attribute / sku
+// product_userinfo-attribute 
 db.product_userinfo.hasOne(db.product_userinfo_value);
 db.product_userinfo_value.belongsTo(db.product_userinfo);
 
