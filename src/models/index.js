@@ -120,12 +120,9 @@ db.sku.belongsTo(db.product);
 db.product.hasMany(db.attribute);
 db.attribute.belongsTo(db.product);
 
-// attribute_value-attribute / sku
+// attribute_value-attribute 
 db.attribute.hasOne(db.attribute_value);
 db.attribute_value.belongsTo(db.attribute);
-
-db.sku.hasMany(db.attribute_value);
-db.attribute_value.belongsTo(db.sku);
 
 // product_userinfo-product
 db.product.hasMany(db.product_userinfo);

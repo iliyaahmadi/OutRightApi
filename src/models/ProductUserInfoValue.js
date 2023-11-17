@@ -1,5 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const ProductUserInfoValue = sequelize.define('product_userInfo_value', {
+  const ProductUserInfoValue = sequelize.define(
+    'product_userInfo_value',
+    {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -8,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       value: {
         type: DataTypes.STRING,
       },
-    });
-    return ProductUserInfoValue;
-  };
-  
+    },
+    { timestamps: false }
+  );
+  return ProductUserInfoValue;
+};

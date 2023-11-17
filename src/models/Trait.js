@@ -1,5 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const Trait = sequelize.define('trait', {
+  const Trait = sequelize.define(
+    'trait',
+    {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -17,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    });
-    return Trait;
-  };
-  
+    },
+    { timestamps: false }
+  );
+  return Trait;
+};
