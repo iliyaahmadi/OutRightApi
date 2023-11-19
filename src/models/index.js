@@ -97,6 +97,15 @@ db.review.belongsTo(db.user);
 db.product.hasMany(db.review);
 db.review.belongsTo(db.product);
 
+// review likes
+db.review_likes = sequelize.define('review_likes', {}, { timestamps: false });
+db.user.belongsToMany(db.review, {
+  through: 'review_likes',
+});
+db.review.belongsToMany(db.user, {
+  through: 'review_likes',
+});
+
 db.user.hasMany(db.question);
 db.question.belongsTo(db.user);
 
@@ -123,7 +132,7 @@ db.attribute_value.belongsTo(db.attribute);
 db.product.hasMany(db.product_userinfo);
 db.product_userinfo.belongsTo(db.product);
 
-// product_userinfo-attribute 
+// product_userinfo-attribute
 db.product_userinfo.hasOne(db.product_userinfo_value);
 db.product_userinfo_value.belongsTo(db.product_userinfo);
 

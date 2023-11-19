@@ -1,4 +1,3 @@
-const Product = require('../models').product;
 const Question = require('../models').question;
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
@@ -43,7 +42,7 @@ const removeByAdmin = asyncErrorHandler(async (req, res, next) => {
 
 module.exports = {
   findAll,
-  create,
+  // create,
   remove,
   removeByAdmin,
 };
