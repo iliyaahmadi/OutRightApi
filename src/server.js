@@ -26,14 +26,18 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-// --temp for initializing server / reseting DB--
+// for initializing server / reseting DB--
 
-// const {stticRole , stticCat , saveSku} = require('./utils/dbInitial');
+// const { stticRole, stticCat, saveSku } = require('./utils/dbInitial');
+// //temp
+// const temp = require('../test.js');
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log('DB CONNECTED - ReStarted');
 //   stticRole(db.role);
-//   stticCat(db.category)
-//   saveSku(db.saveSKU)
+//   stticCat(db.category);
+//   saveSku(db.saveSKU);
+//   //temp
+//   temp(db.user, db.product);
 // });
 
 db.sequelize.sync().then(() => {
