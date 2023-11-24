@@ -1,21 +1,50 @@
 const Review = require('../models').review;
+const User = require('../models').user;
 const ReviewLikes = require('../models').review_likes;
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
 const findAll = asyncErrorHandler(async (req, res, next) => {
-  const reviews = await Review.findAll({
-    attributes: [
-      'id',
-      'comment',
-      'likes',
-      'dislikes',
-      'userId',
-      'createdAt',
-      'userId',
-      'productId',
-    ],
-  });
+  const reviews = await Review.findAll(
+    { where: { productId: req.params.id } },
+    {
+      attributes: [
+        'id',
+        'comment',
+        'likes',
+        'dislikes',
+        'userId',
+        'createdAt',
+        'userId',
+        'productId',
+      ],
+    }
+  );
   return res.status(200).json(reviews);
+});
+
+const create = asyncErrorHandler(async (req, res, next) => {
+  const exists = await Review.findOne({ where: { userId: req.userId } });
+  if (exists) {
+    await exists.destory().then(async () => {
+      await Review.create({
+        comment: req.body.comment,
+        productId: req.body.productId,
+        userId: req.userId,
+      }).then((r) => {
+        return res
+          .status(201)
+          .json({ message: 'نظر قبلی پاک و نظر جدید ثبت شد', review: r });
+      });
+    });
+  } else {
+    await Review.create({
+      comment: req.body.comment,
+      productId: req.body.productId,
+      userId: req.userId,
+    }).then((r) => {
+      return res.status(201).json({ message: 'نظر ثبت شد', review: r });
+    });
+  }
 });
 
 const remove = asyncErrorHandler(async (req, res, next) => {
@@ -81,7 +110,7 @@ const like = asyncErrorHandler(async (req, res) => {
 });
 module.exports = {
   findAll,
-  // create,
+  create,
   remove,
   removeByAdmin,
   like,
