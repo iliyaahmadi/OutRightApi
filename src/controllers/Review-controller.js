@@ -51,16 +51,23 @@ const create = asyncErrorHandler(async (req, res, next) => {
 const remove = asyncErrorHandler(async (req, res, next) => {
   const r_id = req.params.id;
   const u_id = req.userId;
-  await Review.findOne({
+  const review = await Review.findOne({
     where: {
       id: r_id,
     },
-  }).then(async (r) => {
-    if (r.userId == u_id) {
-      await r.destroy();
-    }
   });
-  return res.status(200).json({ message: 'پیام حذف شد' });
+  if (review) {
+    if (review.userId == u_id) {
+      await review.destroy();
+      return res.status(200).json({ message: 'پیام حذف شد' });
+    } else {
+      return res
+        .status(400)
+        .json({ message: 'شما دسترسی به حذف پیام دیگران ندارید ' });
+    }
+  } else {
+    return res.status(400).json({ message: 'پیامی با این ایدی وجود ندارد ' });
+  }
 });
 
 const removeByAdmin = asyncErrorHandler(async (req, res, next) => {

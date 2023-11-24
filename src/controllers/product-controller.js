@@ -3,6 +3,10 @@ const Trait = require('../models').trait;
 const Attribute = require('../models').attribute;
 const AttributeValue = require('../models').attribute_value;
 const CurrentSku = require('../models').saveSKU;
+//TODO: add
+// const product_userinfo = require('../models').product_userinfo;
+// const product_userinfo_value = require('../models').product_userinfo_value;
+//
 const skuGenerator = require('../utils/skuGenerator');
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
@@ -136,8 +140,13 @@ const remove = asyncErrorHandler(async (req, res, next) => {
     where: {
       id: id,
     },
+  }).then(async (c) => {
+    if (c) {
+      return res.status(200).json({ message: 'محصول حذف شد' });
+    } else{
+      return res.status(200).json({ message: 'محصول با این ایدی پیدا نشد' });
+    }
   });
-  return res.status(200).json({ message: 'محصول حذف شد' });
 });
 
 const addAV = asyncErrorHandler(async (req, res, next) => {
