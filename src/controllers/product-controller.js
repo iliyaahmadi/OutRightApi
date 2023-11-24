@@ -3,6 +3,8 @@ const Trait = require('../models').trait;
 const Attribute = require('../models').attribute;
 const AttributeValue = require('../models').attribute_value;
 const CurrentSku = require('../models').saveSKU;
+const Cart = require('../models').cart;
+const CartProduct = require('../models').cart_products;
 //TODO: add
 // const product_userinfo = require('../models').product_userinfo;
 // const product_userinfo_value = require('../models').product_userinfo_value;
@@ -207,6 +209,29 @@ const removeTrait = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+const addToCart = asyncErrorHandler(async (req, res, next) => {
+  const cart = await Cart.findOne({ where: { userId: req.userId } });
+  await CartProduct.create({
+    productId: req.params.id,
+    cartId: cart.id,
+  }).then(() => {
+    return res.status(201).json({ message: 'محصول اضافه شد' });
+  });
+});
+
+const removeFromCart = asyncErrorHandler(async (req, res, next) => {
+  const cart = await Cart.findOne({ where: { userId: req.userId } });
+  await CartProduct.destroy({
+    where: { cartId: cart.id, productId: req.params.id },
+  }).then((c) => {
+    if (c) {
+      return res.status(200).json({ message: 'محصول از سبد خرید حذف شد' });
+    } else {
+      return res.status(200).json({ message: 'محصول در سبد خرید وجود ندارد' });
+    }
+  });
+});
+
 module.exports = {
   findAll,
   findById,
@@ -217,4 +242,6 @@ module.exports = {
   removeAV,
   addTrait,
   removeTrait,
+  addToCart,
+  removeFromCart,
 };
