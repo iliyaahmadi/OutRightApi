@@ -1,6 +1,7 @@
 const Review = require('../models').review;
 const User = require('../models').user;
 const ReviewLikes = require('../models').review_likes;
+const ReviewDislikes = require('../models').review_dislikes;
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
 const findAll = asyncErrorHandler(async (req, res, next) => {
@@ -108,11 +109,48 @@ const like = asyncErrorHandler(async (req, res) => {
     return res.status(200).json({ message: `لایک شد` });
   }
 });
+
+const dislike = asyncErrorHandler(async (req, res) => {
+  let reviewId = req.params.id;
+  let userId = req.userId;
+  //we check if user disliked it before
+  const exists = await ReviewDislikes.findOne({
+    where: {
+      userId: userId,
+      reviewId: reviewId,
+    },
+  });
+  if (exists) {
+    //if already disliked
+    await ReviewDislikes.destroy({
+      where: {
+        userId: userId,
+        reviewId: reviewId,
+      }, //track
+    }).then(async () => {
+      await Review.decrement('dislikes', {
+        where: { id: reviewId },
+      });
+    });
+    return res.status(200).json({ message: `دیس لایک برداشته شد` });
+  } else {
+    //if was not disliked before
+    await ReviewDislikes.create({
+      userId: userId,
+      reviewId: reviewId,
+    }).then(async () => {
+      await Review.increment('dislikes', {
+        where: { id: reviewId },
+      });
+    });
+    return res.status(200).json({ message: `دیس لایک شد` });
+  }
+});
 module.exports = {
   findAll,
   create,
   remove,
   removeByAdmin,
   like,
-  // dislike,
+  dislike,
 };
