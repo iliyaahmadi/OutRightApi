@@ -52,6 +52,7 @@ db.user.belongsTo(db.role, { foreignKey: { defaultValue: 1 } });
 db.user.hasOne(db.cart);
 db.cart.belongsTo(db.user);
 
+db.cart_products = sequelize.define('cart_products', {}, { timestamps: false });
 db.cart.belongsToMany(db.product, {
   through: 'cart_products',
 });
