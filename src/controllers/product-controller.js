@@ -143,7 +143,7 @@ const remove = asyncErrorHandler(async (req, res, next) => {
   }).then(async (c) => {
     if (c) {
       return res.status(200).json({ message: 'محصول حذف شد' });
-    } else{
+    } else {
       return res.status(200).json({ message: 'محصول با این ایدی پیدا نشد' });
     }
   });
@@ -172,14 +172,20 @@ const removeAV = asyncErrorHandler(async (req, res, next) => {
     where: {
       id: id,
     },
+  }).then(async (v) => {
+    if (v) {
+      return res.status(200).json({ message: 'متغیر حذف شد' });
+    } else {
+      return res.status(200).json({ message: 'متغیر با این ایدی پیدا نشد' });
+    }
   });
-  return res.status(200).json({ message: 'متغیر حذف شد' });
 });
 
 const addTrait = asyncErrorHandler(async (req, res, next) => {
   await Trait.create({
     title: req.body.title,
     content: req.body.content,
+    //FIXME:
     icon: 'FIX LATER',
     productId: req.params.id,
   });
@@ -192,8 +198,13 @@ const removeTrait = asyncErrorHandler(async (req, res, next) => {
     where: {
       id: id,
     },
+  }).then(async (t) => {
+    if (t) {
+      return res.status(200).json({ message: 'ویژگی حذف شد' });
+    } else {
+      return res.status(200).json({ message: 'ویژگی با این ایدی پیدا نشد' });
+    }
   });
-  return res.status(200).json({ message: 'ویژگی حذف شد' });
 });
 
 module.exports = {

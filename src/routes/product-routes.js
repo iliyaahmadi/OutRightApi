@@ -29,13 +29,11 @@ productRoutes
   .post(adminAuth, addAV)
   .delete(adminAuth, removeAV);
 
-productRoutes
-  .route('/product/:id/trait')
-  .post(adminAuth, addTrait)
-  .delete(adminAuth, removeTrait);
+productRoutes.route('/product/:id/trait').post(adminAuth, addTrait);
 
 productRoutes.route('/product/:id/review').get(findAllReview);
 
 productRoutes.route('/product/:id/question').get(findAllQA);
 
+productRoutes.route('/trait/:id').delete(adminAuth, removeTrait);
 module.exports = productRoutes;
