@@ -105,6 +105,18 @@ db.user.belongsToMany(db.review, {
 db.review.belongsToMany(db.user, {
   through: 'review_likes',
 });
+// review dislikes
+db.review_dislikes = sequelize.define(
+  'review_dislikes',
+  {},
+  { timestamps: false }
+);
+db.user.belongsToMany(db.review, {
+  through: 'review_dislikes',
+});
+db.review.belongsToMany(db.user, {
+  through: 'review_dislikes',
+});
 
 db.user.hasMany(db.question);
 db.question.belongsTo(db.user);

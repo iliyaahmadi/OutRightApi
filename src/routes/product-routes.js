@@ -10,6 +10,8 @@ const {
   addTrait,
   removeTrait,
 } = require('../controllers/product-controller');
+const { findAll: findAllQA } = require('../controllers/Question-controller');
+const { findAll: findAllReview } = require('../controllers/Review-controller');
 const userAuth = require('../middlewares/user-auth');
 const adminAuth = require('../middlewares/admin-auth');
 const uploadImage = require('../utils/uploadImg');
@@ -31,5 +33,9 @@ productRoutes
   .route('/product/:id/trait')
   .post(adminAuth, addTrait)
   .delete(adminAuth, removeTrait);
+
+productRoutes.route('/product/:id/review').get(findAllReview);
+
+productRoutes.route('/product/:id/question').get(findAllQA);
 
 module.exports = productRoutes;
