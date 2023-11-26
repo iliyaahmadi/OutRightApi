@@ -5,6 +5,7 @@ const blogRoutes = require('./blog-routes.js');
 const adminRoutes = require('./admin-routes.js');
 const reviewRoutes = require('./review-routes.js');
 const questionRoutes = require('./question-routes.js');
+const tagRoutes = require('./tag-routes.js');
 const cartRoutes = require('./cart-routes.js');
 
 module.exports = function (app) {
@@ -15,5 +16,6 @@ module.exports = function (app) {
   app.use('/api/v1', reviewRoutes);
   app.use('/api/v1', questionRoutes);
   app.use('/api/v1', cartRoutes);
+  app.use('/api/v1', tagRoutes);
   app.use('/api/v1/admin', adminRoutes);
 };
