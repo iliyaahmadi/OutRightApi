@@ -5,15 +5,7 @@ const asyncErrorHandler = require('../utils/asyncErrorHandler');
 
 const findAll = asyncErrorHandler(async (req, res, next) => {
   const blogs = await Blog.findAll({
-    attributes: [
-      'id',
-      'title',
-      'slug',
-      'thumb',
-      'author',
-      'createdAt',
-      'updatedAt',
-    ],
+    attributes: ['id', 'title', 'slug', 'thumb', 'author', 'createdAt'],
   });
   res.status(200).json(blogs);
 });
@@ -68,9 +60,10 @@ const edit = asyncErrorHandler(async (req, res, next) => {
         id: req.params.id,
       },
     }
-  );
-  res.status(200).json({
-    message: ` پست با مشخصات داده شده تغییر کرد`,
+  ).then(() => {
+    return res.status(200).json({
+      message: ` پست با مشخصات داده شده تغییر کرد`,
+    });
   });
 });
 
@@ -80,9 +73,72 @@ const remove = asyncErrorHandler(async (req, res, next) => {
     where: {
       id: id,
     },
+    cascade: true,
+  }).then((b) => {
+    if (b) {
+      return res
+        .status(200)
+        .json({ message: `بلاگ مورد نظر با این آیدی پاک شد ${id}` });
+    } else {
+      return res.status(200).json({ message: `بلاگی با این ایدی وجود ندارد` });
+    }
+  });
+});
+
+const addSection = asyncErrorHandler(async (req, res, next) => {
+  await Section.create({
+    title: req.body.title,
+    desc: req.body.desc,
+    blogId: req.params.id,
   }).then(() => {
-    res.status(200).json({ message: `پست مورد نظر با این آیدی پاک شد ${id}` });
-    return;
+    return res.status(201).json({ message: `قسمت اضافه شد` });
+  });
+});
+
+const editSection = asyncErrorHandler(async (req, res, next) => {
+  const target = await Section.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  await Section.update(
+    {
+      title: req.body.title ?? target.title,
+      desc: req.body.desc ?? target.desc,
+    },
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  ).then(() => {
+    return res.status(200).json({
+      message: ` قسمت با مشخصات داده شده تغییر کرد`,
+    });
+  });
+});
+const removeSection = asyncErrorHandler(async (req, res, next) => {
+  await Section.destroy({
+    where: { id: req.params.id },
+  }).then((s) => {
+    if (s) return res.status(200).json({ message: `قسمت مورد نظر پاک شد` });
+    return res.status(200).json({ message: `قسمتی با این ایدی وجود ندارد` });
+  });
+});
+const addImage = asyncErrorHandler(async (req, res, next) => {
+  await SectionImg.create({
+    url: req.body.url,
+    sectionId: req.params.id,
+  }).then(() => {
+    return res.status(201).json({ message: `عکس اضافه شد` });
+  });
+});
+const removeImage = asyncErrorHandler(async (req, res, next) => {
+  await SectionImg.destroy({
+    where: { id: req.params.id },
+  }).then((s) => {
+    if (s) return res.status(200).json({ message: `عکس مورد نظر پاک شد` });
+    return res.status(200).json({ message: `عکسی با این ایدی وجود ندارد` });
   });
 });
 
@@ -92,4 +148,9 @@ module.exports = {
   create,
   edit,
   remove,
+  addSection,
+  editSection,
+  removeSection,
+  addImage,
+  removeImage,
 };
