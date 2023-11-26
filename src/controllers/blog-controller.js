@@ -14,7 +14,6 @@ const findAll = asyncErrorHandler(async (req, res, next) => {
       'createdAt',
       'updatedAt',
     ],
-    include: [{ model: Section, include: [SectionImg] }],
   });
   res.status(200).json(blogs);
 });
@@ -33,10 +32,10 @@ const findById = asyncErrorHandler(async (req, res, next) => {
       'createdAt',
       'updatedAt',
     ],
-  })
-    .then((blog) => {
-      return res.status(200).json(blog);
-    })
+    include: [{ model: Section, include: [SectionImg] }],
+  }).then((blog) => {
+    return res.status(200).json(blog);
+  });
 });
 
 const create = asyncErrorHandler(async (req, res, next) => {
@@ -81,13 +80,10 @@ const remove = asyncErrorHandler(async (req, res, next) => {
     where: {
       id: id,
     },
-  })
-    .then(() => {
-      res
-        .status(200)
-        .json({ message: `پست مورد نظر با این آیدی پاک شد ${id}` });
-      return;
-    })
+  }).then(() => {
+    res.status(200).json({ message: `پست مورد نظر با این آیدی پاک شد ${id}` });
+    return;
+  });
 });
 
 module.exports = {

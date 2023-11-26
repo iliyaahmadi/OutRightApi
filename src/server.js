@@ -7,24 +7,24 @@ const globalErrorHandler = require('./middlewares/error-handler');
 const fs = require('fs');
 global.__basedir = __dirname;
 
-//uncaughtExceptions handler
-process.on('uncaughtException', (err) => {
-  const utc = Date.now();
-  const date = new Date(utc).toString();
-  const errObject = {
-    time: date,
-    error_name: err.name,
-    error_message: err.message,
-    error: err,
-  };
-  fs.appendFileSync(
-    `${__dirname}/logs/uncaughtException.txt`,
-    JSON.stringify(errObject, null, 2),
-    'UTF-8'
-  );
-  console.log('uncaughtException Occured , Shutting Down');
-  process.exit(1);
-});
+// //uncaughtExceptions handler
+// process.on('uncaughtException', (err) => {
+//   const utc = Date.now();
+//   const date = new Date(utc).toString();
+//   const errObject = {
+//     time: date,
+//     error_name: err.name,
+//     error_message: err.message,
+//     error: err,
+//   };
+//   fs.appendFileSync(
+//     `${__dirname}/logs/uncaughtException.txt`,
+//     JSON.stringify(errObject, null, 2),
+//     'UTF-8'
+//   );
+//   console.log('uncaughtException Occured , Shutting Down');
+//   process.exit(1);
+// });
 
 // for initializing server / reseting DB--
 
@@ -37,7 +37,7 @@ process.on('uncaughtException', (err) => {
 //   stticCat(db.category);
 //   saveSku(db.saveSKU);
 //   //temp
-//   temp(db.user, db.product);
+//   temp(db.user, db.product, db.blog);
 // });
 
 db.sequelize.sync().then(() => {
@@ -64,23 +64,23 @@ const server = app.listen(port, () => {
   console.log(`OutRight Api running on port ${port}`);
 });
 
-//unhandledRejection handler
-process.on('unhandledRejection', (err) => {
-  const utc = Date.now();
-  const date = new Date(utc).toString();
-  const errObject = {
-    time: date,
-    error_name: err.name,
-    error_message: err.message,
-    error: err,
-  };
-  fs.appendFileSync(
-    `${__dirname}/logs/unhandledRejection.txt`,
-    JSON.stringify(errObject, null, 2),
-    'UTF-8'
-  );
-  console.log('unhandledRejection Occured , Shutting Down');
-  server.close(() => {
-    process.exit(1);
-  });
-});
+// //unhandledRejection handler
+// process.on('unhandledRejection', (err) => {
+//   const utc = Date.now();
+//   const date = new Date(utc).toString();
+//   const errObject = {
+//     time: date,
+//     error_name: err.name,
+//     error_message: err.message,
+//     error: err,
+//   };
+//   fs.appendFileSync(
+//     `${__dirname}/logs/unhandledRejection.txt`,
+//     JSON.stringify(errObject, null, 2),
+//     'UTF-8'
+//   );
+//   console.log('unhandledRejection Occured , Shutting Down');
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });
