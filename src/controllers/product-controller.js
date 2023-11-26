@@ -208,27 +208,65 @@ const removeTrait = asyncErrorHandler(async (req, res, next) => {
     }
   });
 });
-
+//get cart id => see if added already => if not add product if did add amount
 const addToCart = asyncErrorHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ where: { userId: req.userId } });
-  await CartProduct.create({
-    productId: req.params.id,
-    cartId: cart.id,
-  }).then(() => {
-    return res.status(201).json({ message: 'محصول اضافه شد' });
+  let cartId;
+  await Cart.findOne({ where: { userId: req.userId } }).then(async (cart) => {
+    cartId = cart.id;
+    await CartProduct.findOne({
+      where: { cartId: cartId, productId: req.params.id },
+    }).then(async (p) => {
+      if (!p) {
+        await CartProduct.create({
+          productId: req.params.id,
+          cartId: cartId,
+        }).then(() => {
+          return res.status(201).json({ message: 'محصول اضافه شد' });
+        });
+      } else {
+        await CartProduct.increment('amount', {
+          where: { cartId: cartId },
+        }).then(() => {
+          return res.status(201).json({ message: 'محصول اضافه شد' });
+        });
+      }
+    });
   });
 });
 
 const removeFromCart = asyncErrorHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ where: { userId: req.userId } });
-  await CartProduct.destroy({
-    where: { cartId: cart.id, productId: req.params.id },
-  }).then((c) => {
-    if (c) {
-      return res.status(200).json({ message: 'محصول از سبد خرید حذف شد' });
-    } else {
-      return res.status(200).json({ message: 'محصول در سبد خرید وجود ندارد' });
-    }
+  let cartId;
+  await Cart.findOne({ where: { userId: req.userId } }).then(async (cart) => {
+    cartId = cart.id;
+    await CartProduct.findOne({
+      where: { cartId: cartId, productId: req.params.id },
+    }).then(async (p) => {
+      if (!p) {
+        return res
+          .status(200)
+          .json({ message: 'محصول در سبد خرید وجود ندارد' });
+      } else if (p.amount == 1) {
+        await CartProduct.destroy({
+          where: { cartId: cartId, productId: req.params.id },
+        }).then((c) => {
+          if (c) {
+            return res
+              .status(200)
+              .json({ message: 'محصول از سبد خرید حذف شد' });
+          } else {
+            return res
+              .status(200)
+              .json({ message: 'محصول در سبد خرید وجود ندارد' });
+          }
+        });
+      } else {
+        await CartProduct.decrement('amount', {
+          where: { cartId: cartId },
+        }).then(() => {
+          return res.status(201).json({ message: 'محصول از سبد خرید حذف شد' });
+        });
+      }
+    });
   });
 });
 
