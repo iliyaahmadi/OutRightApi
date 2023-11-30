@@ -33,6 +33,11 @@ module.exports = (error, req, res, next) => {
         status: 'bad request',
         message: 'ایدی وارد شده صحیح نمیباشد',
       });
+    } else if (error.parent.code == '23503') {
+      return res.status(400).json({
+        status: 'bad request',
+        message: 'ایدی انتیتی داده شده وجود ندارد',
+      });
     }
     prodErrors(res, error);
   }
