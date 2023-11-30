@@ -83,17 +83,7 @@ db.user.hasMany(db.discount);
 db.discount.belongsTo(db.user);
 
 // product-tag
-db.product_tag = sequelize.define(
-  'product_tag',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-  },
-  { timestamps: false }
-);
+db.product_tag = sequelize.define('product_tag', {}, { timestamps: false });
 db.tag.belongsToMany(db.product, {
   through: { model: db.product_tag, unique: false },
 });
@@ -101,17 +91,7 @@ db.product.belongsToMany(db.tag, {
   through: { model: db.product_tag, unique: false },
 });
 // blog-tag
-db.blog_tag = sequelize.define(
-  'blog_tag',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-  },
-  { timestamps: false }
-);
+db.blog_tag = sequelize.define('blog_tag', {}, { timestamps: false });
 db.tag.belongsToMany(db.blog, {
   through: { model: db.blog_tag, unique: false },
 });

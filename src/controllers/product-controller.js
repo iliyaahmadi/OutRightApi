@@ -5,6 +5,8 @@ const AttributeValue = require('../models').attribute_value;
 const CurrentSku = require('../models').saveSKU;
 const Cart = require('../models').cart;
 const CartProduct = require('../models').cart_products;
+const ProductTag = require('../models').product_tag;
+const Tag = require('../models').tag;
 //TODO: add
 // const product_userinfo = require('../models').product_userinfo;
 // const product_userinfo_value = require('../models').product_userinfo_value;
@@ -52,6 +54,12 @@ const findById = asyncErrorHandler(async (req, res, next) => {
       {
         model: Attribute,
         include: [{ model: AttributeValue, findAll }],
+      },
+      {
+        model: Tag,
+        through: {
+          attributes: [],
+        },
       },
     ],
   }).then((product) => {
