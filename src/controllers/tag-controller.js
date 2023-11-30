@@ -46,8 +46,8 @@ const addToProduct = asyncErrorHandler(async (req, res, next) => {
       tagId: tag,
       productId: req.params.id,
     });
-    return res.status(201).json({ msg: 'برچسب های مورد نظر اضافه شدند', tags });
   }
+  return res.status(201).json({ msg: 'برچسب های مورد نظر اضافه شدند', tags });
 });
 
 module.exports = {
